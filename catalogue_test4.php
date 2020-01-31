@@ -1,5 +1,5 @@
 <?php
-include("function_1.php");
+include("function_2.php");
 
 
 menu();
@@ -10,14 +10,14 @@ menu();
 <div class="container">
 
     <?php
-    $article = [
+    $articles = [
         ['name' => 'article1', 'picture' => 'img/basket1.jpg', 'price' => 50],
         ['name' => 'article2', 'picture' => 'img/basket2.jpg', 'price' => 20],
         ['name' => 'article3', 'picture' => 'img/basket3.jpg', 'price' => 10],
     ];
 
-    for ($i = 0; $i < count($article); $i = $i + 1) {
-        article($article [$i]['name'], $article [$i]['picture'], $article [$i]['price']);
+    foreach ($articles as $article) {
+        article($article['name'], $article['picture'], $article['price']);
     }
     ?>
 

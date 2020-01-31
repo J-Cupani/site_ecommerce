@@ -79,12 +79,13 @@ function menu(){
             reprehenderit expedita.</p>
     </div>
 </section>
-<?php };
+<div class="container">
+<?php }
+
 
 function article($name, $picture, $price)
 {
     $descr = "Ceci est une description de mon produit"; ?>
-
     <div class="media">
         <img src="<?php echo $picture ?>" class="align-self-center mr-5 col-2" alt="photo produit">
         <div class="align-self-center col-8">
@@ -95,9 +96,8 @@ function article($name, $picture, $price)
             <p><?php echo $price ?></p>
         </div>
     </div>
-
-
 <?php }
+
 
 function form(){ ?>
 <form action="addArticle.php" method="post" enctype="multipart/form-data">
