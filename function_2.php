@@ -82,7 +82,6 @@ function menu(){
 <div class="container">
 <?php }
 
-
 function article($name, $picture, $price)
 {
     $descr = "Ceci est une description de mon produit"; ?>
@@ -96,28 +95,4 @@ function article($name, $picture, $price)
             <p><?php echo $price ?></p>
         </div>
     </div>
-<?php }
-
-
-function form(){ ?>
-<form action="addArticle.php" method="post" enctype="multipart/form-data">
-    <div class="form-row">
-        <div class="form-group col-md-6">
-            <label for="inputArticle">L'article</label>
-            <input type="text" class="form-control" id="inputArticle" name="product" placeholder="Nom du produit">
-        </div>
-        <div class="form-group col-md-6">
-            <label for="inputPrice">Le prix</label>
-            <input type="text" class="form-control" id="inputArticle" name="price" placeholder="Prix du produit">
-        </div>
-    </div>
-
-    <div class="form-row mb-5">
-        <div class="form-group col-md-4">
-            <label for="inputImage">Choisir votre Image</label>
-            <input type="file" class="form-control-file" id="inputImage" name="picture" placeholder="blabl">
-        </div>
-    </div>
-    <button type="submit" class="btn btn-primary mb-5">Envoyé</button>
-</form>
 <?php } ?>
