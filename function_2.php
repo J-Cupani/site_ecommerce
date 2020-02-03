@@ -80,19 +80,54 @@ function menu(){
     </div>
 </section>
 <div class="container">
-<?php }
+    <?php }
 
-function article($name, $picture, $price)
-{
-    $descr = "Ceci est une description de mon produit"; ?>
-    <div class="media">
-        <img src="<?php echo $picture ?>" class="align-self-center mr-5 col-2" alt="photo produit">
-        <div class="align-self-center col-8">
-            <h5 class="mt-0"><?php echo $name ?></h5>
-            <p><?php echo $descr ?></p>
+    function article($name, $picture, $price, $key)
+    {
+        $descr = "Ceci est une description de mon produit"; ?>
+        <div class="media mb-3">
+            <img src="<?php echo $picture ?>" class="align-self-center mr-5 col-2" alt="photo produit">
+            <div class="align-self-center col-6">
+                <h5 class="mt-0"><?php echo $name ?></h5>
+                <p><?php echo $descr ?></p>
+            </div>
+            <div class="align-self-center col-2">
+                <p><?php echo $price ?> €</br></p>
+            </div>
+            <div class="form-check align-self-center col-2">
+                <input type="checkbox" name=<?= $key ?> class="form-check-input" id="key">
+                <label class="form-check-label" for="key">Selectionner</label>
+            </div>
         </div>
-        <div class="align-self-center col-2">
-            <p><?php echo $price ?></p>
+    <?php }
+
+    function articlePanier($name, $picture, $price)
+    {
+        $descr = "Ceci est une description de mon produit"; ?>
+        <div class="media mb-3">
+            <img src="<?php echo $picture ?>" class="align-self-center mr-5 col-2" alt="photo produit">
+            <div class="align-self-center col-6">
+                <h5 class="mt-0"><?php echo $name ?></h5>
+                <p><?php echo $descr ?></p>
+            </div>
+            <div class="align-self-center col-2">
+                <p><?php echo $price ?> €</br></p>
+            </div>
+            <div class="col-1 mt-2">
+                <label for="exampleFormControlSelect1">Quantité</label>
+                <select class="form-control" id="exampleFormControlSelect1">
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                </select>
+            </div>
         </div>
-    </div>
-<?php } ?>
+    <?php }
+
+    function totalPanier($sum, $prix_article)
+    {
+        $sum = $sum + $prix_article;
+        return $sum;
+    } ?>

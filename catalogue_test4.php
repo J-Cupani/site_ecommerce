@@ -1,26 +1,44 @@
 <?php
 include("function_2.php");
-
+$selec=false;
 
 menu();
 
 ?>
 
 <!--Contenus-->
-<div class="container">
-
+<form method="post" action="panier.php">
     <?php
     $articles = [
-        ['name' => 'article1', 'picture' => 'img/basket1.jpg', 'price' => 50],
-        ['name' => 'article2', 'picture' => 'img/basket2.jpg', 'price' => 20],
-        ['name' => 'article3', 'picture' => 'img/basket3.jpg', 'price' => 10],
+        'article1' => [
+            'name' => 'Basket blanche',
+            'picture' => 'upload/basket1.jpg',
+            'price' => 50
+        ],
+        'article2' => [
+            'name' => 'Chaussure de travail',
+            'picture' => 'upload/basket2.jpg',
+            'price' => 40
+        ],
+        'article3' => [
+            'name' => 'Basket multicouleur',
+            'picture' => 'upload/basket3.jpg',
+            'price' => 10
+        ],
     ];
 
-    foreach ($articles as $article) {
-        article($article['name'], $article['picture'], $article['price']);
+    foreach ($articles as $key => $article) {
+        article($article['name'], $article['picture'], $article['price'], $key);
     }
-    ?>
 
+    ?>
+    <div class="row justify-content-center mt-5 mb-5">
+        <div class="col-2">
+            <button type="submit" class="btn btn-primary">Envoyé</button>
+        </div>
+    </div>
+
+</form>
 
 </div>
 </body>
