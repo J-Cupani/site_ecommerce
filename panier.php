@@ -1,5 +1,6 @@
 <?php
 include("function_2.php");
+session_start();
 menu();
 $articles = [
     'article1' => [
@@ -18,19 +19,29 @@ $articles = [
         'price' => 10
     ],
 ];
+
+
 $sum = 0;
-foreach ($_POST as $key => $article) {
-    $article_panier = $articles[$key];
+foreach ($_POST['articles'] as $key => $article) {
+    echo '<form method="post" action="panier.php">';
+    articlePanier($articles[$key]['name'], $articles[$key]['picture'], $articles[$key]['price'], $key);
+    if (isset($_POST['quantity'][$key])){
+        $sum = totalPanier($sum, $articles[$key]['price'], $_POST['quantity'][$key]);
+}}
 
-    articlePanier($article_panier['name'], $article_panier['picture'], $article_panier['price']);
-    $sum = totalPanier($sum, $article_panier['price']);
+?>
+    <div class="row justify-content-center mt-5">
 
-    //  $sum = $sum + $article_panier['price'];
+        <div class="align-self-center ">
 
-}
-echo '<b> le total du panier de Khadijah est de </b>' . $sum . ' euros';
+            <button type="submit" class="btn btn-primary">Actualiser</button>
+        </div>
+    </div>
+    </form>
+<?php
+
+echo '<b> Le total du panier de Khadijah est de </b>' . $sum . ' euros';
 
 
-//Total panier
 
 

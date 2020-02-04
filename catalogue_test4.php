@@ -1,7 +1,7 @@
 <?php
 include("function_2.php");
 $selec=false;
-
+session_start();
 menu();
 
 ?>
