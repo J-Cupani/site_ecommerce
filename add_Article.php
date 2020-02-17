@@ -64,8 +64,7 @@ if ($error == true) { ?>
                 <label for="inputImage">Choisir votre Image</label>
                 <input type="file" class="form-control-file" id="inputImage" name="picture"
                        placeholder="Photo du Produit" value=<?= $errprice ?><br/>
-            </div>
-        </div>
+
         <button type="submit" class="btn btn-primary mb-5">Envoyé</button>
     </form>
     <?php

@@ -1,4 +1,16 @@
 <?php
+
+try
+{
+    $bdd = new PDO('mysql:host=localhost;dbname=catalogue;charset=utf8', 'root', '');
+}
+catch (Exception $e)
+{
+    die('Erreur : ' . $e->getMessage());
+}
+
+
+
 include("function_2.php");
 $selec=false;
 session_start();

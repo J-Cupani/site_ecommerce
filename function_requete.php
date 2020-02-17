@@ -85,70 +85,130 @@ function menu()
     <div class="container">
 <?php }
 
-function article($name, $picture, $price, $key)
+function connect()
 {
-    $descr = "Ceci est une description de mon produit"; ?>
-    <div class="media mb-3">
-        <img src="<?php echo $picture ?>" class="align-self-center mr-5 col-2" alt="photo produit">
-        <div class="align-self-center col-6">
-            <h5 class="mt-0"><?php echo $name ?></h5>
-            <p><?php echo $descr ?></p>
-        </div>
-        <div class="align-self-center col-2">
-            <p><?php echo $price ?> €</br></p>
-        </div>
-        <div class="form-check align-self-center col-2">
-            <input type="checkbox" name="articles[<?= $key ?>]" class="form-check-input" id="key">
-            <label class="form-check-label" for="key">Selectionner</label>
-        </div>
-    </div>
-<?php }
-
-function articlePanier($name, $picture, $price, $key)
-{
-
-    $descr = "Ceci est une description de mon produit"; ?>
-    <div class="media mb-3">
-        <img src="<?php echo $picture ?>" class="align-self-center mr-5 col-2" alt="photo produit">
-        <div class="align-self-center col-6">
-            <h5 class="mt-0"><?php echo $name ?></h5>
-            <p><?php echo $descr ?></p>
-        </div>
-        <div class="align-self-center col-1">
-            <p><?php echo $price ?> €</br></p>
-        </div>
-        <div class="col-1 mt-2">
-            <input type="hidden" name="articles[<?= $key ?>]" class="form-check-input" id="key">
-            <label for="inputQuantity">Quantité </label>
-            <input type="Number" placeholder="0" class="form-control" id="inputQuantity"
-                   name="quantity[<?php echo $key ?>]"
-                <?php if (isset($_POST['quantity'][$key])) { ?>
-                    value="<?php echo $_POST['quantity'][$key] ?>"
-                <?php } ?>
-            >
-        </div>
-<!--        <div class="col-1 mt-2">-->
-<!--            <input type="hidden" name="articles[--><?//= $key ?><!--]" class="form-check-input" id="key">-->
-<!--            <label for="inputDelete">Supprimé </label>-->
-<!--            <input type="Number" placeholder="0" class="form-control" id="inputDelete"-->
-<!--                   name="quantity[--><?php //echo $key ?><!--]"-->
-<!--                --><?php //if (isset($_POST['quantity'][$key])) { ?>
-<!--                    value="--><?php //echo $_POST['quantity'][$key] ?><!--"-->
-<!--                --><?php //} ?>
-<!--            >-->
-<!--        </div>-->
-    </div>
-
-   
-
-
-<?php }
-
-function totalPanier($sum, $prix_article, $quantite)
-{
-    $sum = $sum + ($prix_article * $quantite = intval($quantite));
-    return $sum;
+    try {
+        $bdd = new PDO('mysql:host=localhost;dbname=catalogue;charset=utf8', 'root', '');
+    } catch (Exception $e) {
+        die('Erreur : ' . $e->getMessage());
+    }
+    return $bdd;
 }
 
+function affichProduct($bdd)
+{
+    ?>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Nom du produit</th>
+            <th scope="col">Poids</th>
+            <th scope="col">Quantité</th>
+            <th scope="col">Prix</th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php
+        $reponse = $bdd->query('Select * FROM product');
+        while ($donnees = $reponse->fetch()) { ?>
+            <tr>
+                <th scope="row"><?= $donnees['idProduct'] ?></th>
+                <td><?= $donnees['productName'] ?></td>
+                <td><?= $donnees['weight'] / 1000 . ' Kg' ?></td>
+                <td><?= $donnees['stock'] ?></td>
+                <td><?= $donnees['price'] . ' €' ?></td>
+            </tr>
+        <?Php }
+        $reponse->closeCursor(); ?>
+        </tbody>
+    </table>
+<?php }
 
-?>
+function stockEmpty($bdd)
+{
+    ?>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Nom du produit</th>
+            <th scope="col">Poids</th>
+            <th scope="col">Quantité</th>
+            <th scope="col">Prix</th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php
+        $reponse = $bdd->query('Select * FROM product WHERE stock=0');
+        while ($donnees = $reponse->fetch()) { ?>
+            <tr>
+                <th scope="row"><?= $donnees['idProduct'] ?></th>
+                <td><?= $donnees['productName'] ?></td>
+                <td><?= $donnees['weight'] / 1000 . ' Kg' ?></td>
+                <td><?= $donnees['stock'] ?></td>
+                <td><?= $donnees['price'] . ' €' ?></td>
+            </tr>
+        <?Php }
+        $reponse->closeCursor(); ?>
+        </tbody>
+    </table>
+<?php }
+
+function priceTotalCommand($bdd)
+{
+    ?>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col">N° Commande</th>
+            <th scope="col">Prix Total</th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php
+        $reponse = $bdd->query('SELECT id_order, SUM(price*quantity) as Total
+FROM product
+INNER JOIN orderproduct ON product.idProduct = orderproduct.idProduct
+GROUP By id_order');
+        while ($donnees = $reponse->fetch()) { ?>
+            <tr>
+                <th scope="row">Commande <?=$donnees['id_order'] ?></th>
+                <td><?= $donnees['Total'] . ' €'?></td>
+            </tr>
+        <?Php }
+        $reponse->closeCursor(); ?>
+        </tbody>
+    </table>
+<?php }
+
+function charlizeCommand($bdd)
+{
+    ?>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col">Commande de Charlize</th>
+            <th scope="col">Date</th>
+            <th scope="col">Prix Total</th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php
+        $reponse = $bdd->query('SELECT orders.*
+FROM orders
+INNER JOIN client ON orders.idClient = client.idClient
+where firstName = \'charlize\'');
+        while ($donnees = $reponse->fetch()) { ?>
+            <tr>
+                <th scope="row">Commande <?=$donnees['idOrder'] ?></th>
+                <td><?= $donnees['date'] . ' €'?></td>
+                <td><?= $donnees['totalAmount'] . ' €'?></td>
+            </tr>
+        <?Php }
+        $reponse->closeCursor(); ?>
+        </tbody>
+    </table>
+<?php }
+
+

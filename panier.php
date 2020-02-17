@@ -40,7 +40,7 @@ foreach ($_POST['articles'] as $key => $article) {
     </form>
 <?php
 
-echo '<b> Le total du panier de Khadijah est de </b>' . $sum . ' euros';
+echo '<b> Le total du panier est de </b>' . $sum . ' euros';
 
 
 
