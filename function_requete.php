@@ -211,4 +211,33 @@ where firstName = \'charlize\'');
     </table>
 <?php }
 
+function addproduct($bdd){
+$productName='producttest';
+$description='blababa';
+$price=150;
+$image='test.jpg';
+$stock=10;
+$avaibility=1;
+$weight=1000;
+$idcatogory=2;
+
+///** @var PDOStatement $req */
+$req = $bdd->prepare('INSERT INTO product (productName, description, price, image, stock, avaibility, weight, idCategory) 
+VALUES (:productName, :description, :price, :image, :stock, :avaibility, :weight, :idCategory)');
+$test=$req->execute(array(
+	'productName' => $productName,
+	'description' => $description,
+	'price' => $price,
+	'image' => $image,
+	'stock' => $stock,
+	'avaibility' => $avaibility,
+	'weight' => $weight,
+	'idCategory' => $idcatogory,
+	));
+//var_dump($test);
+//var_dump($req->errorInfo());
+//var_dump($req->debugDumpParams());
+echo 'Le produit a bien été ajouté !';
+}
+
 

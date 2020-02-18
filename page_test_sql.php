@@ -30,5 +30,8 @@ $bdd = connect(); ?>
     </div>
 </div>
 
+<?php
+addproduct($bdd);
+
 
 
