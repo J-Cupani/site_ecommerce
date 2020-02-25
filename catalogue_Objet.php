@@ -5,23 +5,24 @@ try {
     die('Erreur : ' . $e->getMessage());
 }
 
-include("function_PBO.php");
-$selec = false;
 session_start();
+include("function_Objet.php");
 menu();
-?>
-<!--Contenus-->
-<form method="post" action="panier_PBO.php">
-    <?php
-    affichProduct($bdd);
-    ?>
-    <div class="row justify-content-center mt-5 mb-5">
-        <div class="col-2">
-            <button type="submit" class="btn btn-primary">Commandé</button>
-        </div>
-    </div>
 
-</form>
+$catalogue = new Catalogue();
 
-</body>
-</html>
+$reponse = $bdd->query('Select idProduct, productName, description, price, image FROM product');
+while ($article = $reponse->fetch()) {
+    $articles = new Article();
+    $articles->setName($article['productName']);
+    $articles->setPrice($article['price']);
+    $articles->setDescription($article['description']);
+    $articles->setPicture($article['image']);
+    $catalogue->addArticles($articles);
+}
+
+displayCat($catalogue);
+
+
+
+footer();
