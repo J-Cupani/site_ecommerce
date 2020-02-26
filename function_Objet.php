@@ -219,124 +219,6 @@ function affichProduct($bdd)
     $reponse->closeCursor();
 }
 
-
-class Article
-{
-    private $_name;
-    private $_description;
-    private $_price;
-    private $_picture;
-    private $_weight;
-    private $_stock;
-    private $_avaibility;
-
-    public function getName()
-    {
-        return $this->_name;
-    }
-
-    public function setName($name)
-    {
-        if (is_string($name)) {
-            $this->_name = $name;
-        }
-    }
-
-    public function getDescription()
-    {
-        return $this->_description;
-    }
-
-    public function setDescription($description)
-    {
-        if (is_string($description)) {
-            $this->_description = $description;
-        }
-    }
-
-    public function getPrice()
-    {
-        return $this->_price;
-    }
-
-    public function setPrice($price)
-    {
-        $price = (int)$price;
-        if ($price > 0) {
-            $this->_price = $price;
-        }
-    }
-
-    public function getPicture()
-    {
-        return $this->_picture;
-    }
-
-    public function setPicture($picture)
-    {
-        if (is_string($picture)) {
-            $this->_picture = $picture;
-        }
-    }
-
-    public function getWeight()
-    {
-        return $this->_weight;
-    }
-
-    public function setWeight($weight)
-    {
-        $weight = (int)$weight;
-        if ($weight > 0) {
-            $this->_weight = $weight;
-        }
-    }
-
-    public function getStock()
-    {
-        return $this->_stock;
-    }
-
-    public function setStock($stock)
-    {
-        $stock = (int)$stock;
-        if ($stock > 0) {
-            $this->_stock = $stock;
-        }
-    }
-
-    public function getAvaibility()
-    {
-        return $this->_avaibility;
-    }
-
-    public function setAvaibility($avaibility)
-    {
-        $this->_avaibility = $avaibility;
-    }
-}
-
-class Catalogue
-{
-    private $_catalogue = [];
-
-    public function getCatalogue()
-    {
-        return $this->_catalogue;
-    }
-
-    public function setCatalogue($catalogue)
-    {
-        $this->_catalogue = $catalogue;
-    }
-
-    public function addArticles($articles)
-    {
-        $this->_catalogue[] = $articles;
-    }
-
-}
-
 function displayArticle(Article $article)
 {
     ?>
@@ -356,13 +238,38 @@ function displayArticle(Article $article)
         </div>
     </div>
     <?php
-
 }
-
 
 function displayCat($catalogue)
 {
     foreach ($catalogue->getCatalogue() as $article) {
         displayArticle($article);
     }
+}
+
+function displayClient(Client $client)
+{
+    ?>
+    <div class="card col-3" style="width: 18rem;">
+        <div class="card-body">
+            <h5 class="card-title"><?= $client->getName() . ' ' . $client->getFirstname() ?></h5>
+            <h6 class="card-subtitle mb-2 text-muted"><?= $client->getCity() . ' ' . $client->getCP() ?></h6>
+            <p class="card-text"><?= $client->getAddress() ?></p>
+        </div>
+    </div>
+    <?php
+}
+
+function displayListeClients($listeClients)
+{
+    ?>
+
+    <div class="row">
+        <?php
+        foreach ($listeClients->getlisteClients() as $client) {
+            displayClient($client);
+        }
+        ?>
+    </div>
+    <?php
 }
