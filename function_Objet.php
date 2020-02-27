@@ -94,8 +94,9 @@ function menu()
 function footer()
 {
     ?>
-</div>
-</body>
+    </div>
+    </body>
+    </html>
     <?php
 }
 
@@ -219,13 +220,21 @@ function affichProduct($bdd)
     $reponse->closeCursor();
 }
 
-function displayArticle(Article $article)
+function displayArticle($article)
 {
     ?>
     <div class="media mb-3">
         <img src="<?= $article->getPicture() ?>" class="align-self-center mr-5 col-2" alt="photo produit">
         <div class="align-self-center col-6">
             <h5 class="mt-0"><?= $article->getName() ?></h5>
+            <h6 class="mt-0">
+                <?php
+                if ($article->getTaille() != null) {
+                    echo 'Taille' . ' ' . $article->getTaille();
+                } elseif ($article->getPointure() != null) {
+                    echo 'Pointure' . ' ' . $article->getPointure();
+                }
+                ?></h6>
             <p><?= $article->getDescription() ?></p>
         </div>
         <div class="align-self-center col-2">
@@ -240,6 +249,7 @@ function displayArticle(Article $article)
     <?php
 }
 
+
 function displayCat($catalogue)
 {
     foreach ($catalogue->getCatalogue() as $article) {
@@ -250,7 +260,7 @@ function displayCat($catalogue)
 function displayClient(Client $client)
 {
     ?>
-    <div class="card col-3" style="width: 18rem;">
+    <div class="card col-3 ml-4 mt-4" style="width: 18rem;">
         <div class="card-body">
             <h5 class="card-title"><?= $client->getName() . ' ' . $client->getFirstname() ?></h5>
             <h6 class="card-subtitle mb-2 text-muted"><?= $client->getCity() . ' ' . $client->getCP() ?></h6>
@@ -270,6 +280,8 @@ function displayListeClients($listeClients)
             displayClient($client);
         }
         ?>
+
     </div>
     <?php
 }
+

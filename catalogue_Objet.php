@@ -7,22 +7,28 @@ try {
 
 session_start();
 include("function_Objet.php");
+include("class_Objet.php");
 menu();
 
 $catalogue = new Catalogue();
 
-$reponse = $bdd->query('Select idProduct, productName, description, price, image FROM product');
+$reponse = $bdd->query('SELECT idChaussure, idVetement, Taille, pointure, productName, description, price, image
+FROM product
+LEFT OUTER JOIN chaussure ON product.idProduct = chaussure.idProduct
+LEFT OUTER JOIN vetement ON product.idProduct = vetement.idProduct');
 while ($article = $reponse->fetch()) {
-    $articles = new Article();
-    $articles->setName($article['productName']);
-    $articles->setPrice($article['price']);
-    $articles->setDescription($article['description']);
-    $articles->setPicture($article['image']);
+
+    if ($article['Taille'] != null) {
+        $articles = new Vetement($article['productName'], $article['price'], $article['description'], $article['image'], $article['Taille']);
+    } elseif ($article['pointure'] != null) {
+        $articles = new Chaussure($article['productName'], $article['price'], $article['description'], $article['image'], $article['pointure']);
+    } else {
+        $articles = new Article($article['productName'], $article['price'], $article['description'], $article['image']);
+    }
     $catalogue->addArticles($articles);
 }
 
+
 displayCat($catalogue);
-
-
 
 footer();

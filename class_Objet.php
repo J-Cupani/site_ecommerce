@@ -100,6 +100,73 @@ class Article
     {
         $this->_avaibility = $avaibility;
     }
+
+    public function getPointure()
+    {
+        return null;
+    }
+
+
+    public function getTaille()
+    {
+        return null;
+    }
+
+    public function __construct($name, $price, $description, $picture)
+    {
+        $this->setName($name);
+        $this->setPrice($price);
+        $this->setDescription($description);
+        $this->setPicture($picture);
+    }
+
+}
+
+class Vetement extends Article
+{
+    private $_taille;
+
+    public function getTaille()
+    {
+        return $this->_taille;
+    }
+
+    public function setTaille($taille)
+    {
+        if (is_string($taille)) {
+            $this->_taille = $taille;
+        }
+    }
+
+    public function __construct($name, $price, $description, $picture, $taille)
+    {
+        parent::__construct($name, $price, $description, $picture);
+        $this->setTaille($taille);
+    }
+}
+
+class Chaussure extends Article
+{
+    private $_pointure;
+
+    public function getPointure()
+    {
+        return $this->_pointure;
+    }
+
+    public function setPointure($pointure)
+    {
+        $pointure = (int)$pointure;
+        if ($pointure > 0 && $pointure < 54) {
+            $this->_pointure = $pointure;
+        }
+    }
+    public function __construct($name, $price, $description, $picture, $pointure)
+    {
+        parent::__construct($name, $price, $description, $picture);
+        $this->setPointure($pointure);
+    }
+
 }
 
 class Catalogue
