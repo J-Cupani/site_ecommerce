@@ -42,7 +42,7 @@ menu();
     foreach ($articles as $key => $article) {
         article($article['name'], $article['picture'], $article['price'], $key);
     }
-
+var_dump($_POST);
     ?>
     <div class="row justify-content-center mt-5 mb-5">
         <div class="col-2">

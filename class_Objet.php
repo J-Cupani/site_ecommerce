@@ -1,5 +1,4 @@
 <?php
-
 try {
     $bdd = new PDO('mysql:host=localhost;dbname=catalogue;charset=utf8', 'root', '');
 } catch (Exception $e) {
@@ -8,6 +7,8 @@ try {
 
 class Article
 {
+
+    private $_idProduct;
     private $_name;
     private $_description;
     private $_price;
@@ -15,6 +16,25 @@ class Article
     private $_weight;
     private $_stock;
     private $_avaibility;
+
+    public function __construct($idProduct, $name, $price, $description, $picture)
+    {
+        $this->setIdProduct($idProduct);
+        $this->setName($name);
+        $this->setPrice($price);
+        $this->setDescription($description);
+        $this->setPicture($picture);
+    }
+
+    public function getIdProduct()
+    {
+        return $this->_idProduct;
+    }
+
+    public function setIdProduct($idProduct): void
+    {
+        $this->_idProduct = $idProduct;
+    }
 
     public function getName()
     {
@@ -106,25 +126,21 @@ class Article
         return null;
     }
 
-
     public function getTaille()
     {
         return null;
     }
-
-    public function __construct($name, $price, $description, $picture)
-    {
-        $this->setName($name);
-        $this->setPrice($price);
-        $this->setDescription($description);
-        $this->setPicture($picture);
-    }
-
 }
 
 class Vetement extends Article
 {
     private $_taille;
+
+    public function __construct($idProduct, $name, $price, $description, $picture, $taille)
+    {
+        parent::__construct($idProduct, $name, $price, $description, $picture);
+        $this->setTaille($taille);
+    }
 
     public function getTaille()
     {
@@ -137,17 +153,17 @@ class Vetement extends Article
             $this->_taille = $taille;
         }
     }
-
-    public function __construct($name, $price, $description, $picture, $taille)
-    {
-        parent::__construct($name, $price, $description, $picture);
-        $this->setTaille($taille);
-    }
 }
 
 class Chaussure extends Article
 {
     private $_pointure;
+
+    public function __construct($idProduct, $name, $price, $description, $picture, $pointure)
+    {
+        parent::__construct($idProduct, $name, $price, $description, $picture);
+        $this->setPointure($pointure);
+    }
 
     public function getPointure()
     {
@@ -161,12 +177,6 @@ class Chaussure extends Article
             $this->_pointure = $pointure;
         }
     }
-    public function __construct($name, $price, $description, $picture, $pointure)
-    {
-        parent::__construct($name, $price, $description, $picture);
-        $this->setPointure($pointure);
-    }
-
 }
 
 class Catalogue
@@ -187,7 +197,33 @@ class Catalogue
     {
         $this->_catalogue[] = $articles;
     }
+}
 
+class Panier
+{
+    private $_panier = [];
+
+    public function getPanier(): array
+    {
+        return $this->_panier;
+    }
+
+    public function addArticle($idProduct)
+    {
+        $this->_panier[$idProduct] = 1;
+    }
+
+    public function updateArticle($idProduct, $quantity)
+    {
+        if (isset($idProduct)) {
+            $this->_panier[$idProduct] = $quantity;
+        }
+    }
+
+    public function deleteArticle($idProduct)
+    {
+        unset ($this->_panier[$idProduct]);
+    }
 }
 
 class Client

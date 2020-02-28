@@ -106,9 +106,8 @@ function article($name, $picture, $price, $key)
 
 function articlePanier($name, $picture, $price, $key)
 {
-
     $descr = "Ceci est une description de mon produit"; ?>
-    <div class="media mb-3">
+    <div class="row media mb-3">
         <img src="<?php echo $picture ?>" class="align-self-center mr-5 col-2" alt="photo produit">
         <div class="align-self-center col-6">
             <h5 class="mt-0"><?php echo $name ?></h5>
@@ -125,30 +124,16 @@ function articlePanier($name, $picture, $price, $key)
                 <?php if (isset($_POST['quantity'][$key])) { ?>
                     value="<?php echo $_POST['quantity'][$key] ?>"
                 <?php } ?>
-            >
+
         </div>
-<!--        <div class="col-1 mt-2">-->
-<!--            <input type="hidden" name="articles[--><?//= $key ?><!--]" class="form-check-input" id="key">-->
-<!--            <label for="inputDelete">Supprimé </label>-->
-<!--            <input type="Number" placeholder="0" class="form-control" id="inputDelete"-->
-<!--                   name="quantity[--><?php //echo $key ?><!--]"-->
-<!--                --><?php //if (isset($_POST['quantity'][$key])) { ?>
-<!--                    value="--><?php //echo $_POST['quantity'][$key] ?><!--"-->
-<!--                --><?php //} ?>
-<!--            >-->
-<!--        </div>-->
     </div>
 
-   
+<?php  var_dump($_POST);}
 
-
-<?php }
-
-function totalPanier($sum, $prix_article, $quantite)
+function totalPanier($prix_article, $quantite)
 {
+    $sum=0;
     $sum = $sum + ($prix_article * $quantite = intval($quantite));
     return $sum;
 }
 
-
-?>

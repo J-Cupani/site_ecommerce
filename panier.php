@@ -1,4 +1,5 @@
 <?php
+
 include("function_2.php");
 session_start();
 menu();
@@ -21,12 +22,12 @@ $articles = [
 ];
 
 
-$sum = 0;
+
 foreach ($_POST['articles'] as $key => $article) {
     echo '<form method="post" action="panier.php">';
     articlePanier($articles[$key]['name'], $articles[$key]['picture'], $articles[$key]['price'], $key);
     if (isset($_POST['quantity'][$key])){
-        $sum = totalPanier($sum, $articles[$key]['price'], $_POST['quantity'][$key]);
+        $sum = totalPanier($articles[$key]['price'], $_POST['quantity'][$key]);
 }}
 
 ?>

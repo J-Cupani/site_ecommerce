@@ -1,11 +1,13 @@
 <?php
 
-try {
-    $bdd = new PDO('mysql:host=localhost;dbname=catalogue;charset=utf8', 'root', '');
-} catch (Exception $e) {
-    die('Erreur : ' . $e->getMessage());
+function database()
+{
+    try {
+        $bdd = new PDO('mysql:host=localhost;dbname=catalogue;charset=utf8', 'root', '');
+    } catch (Exception $e) {
+        die('Erreur : ' . $e->getMessage());
+    }
 }
-
 
 function menu()
 {
@@ -52,10 +54,10 @@ function menu()
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="catalogue_PBO.php">Catalogue</a>
+                        <a class="nav-link" href="catalogue_Objet.php">Catalogue</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="panier_PBO.php">Panier</a>
+                        <a class="nav-link" href="panier_Objet.php">Panier</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">Contact</a>
@@ -100,126 +102,6 @@ function footer()
     <?php
 }
 
-function articlePanier($bdd)
-{
-    if (isset($_POST['quantity'])) {
-        $tmparticles = [];
-        foreach ($_POST['quantity'] as $key => $value) {
-            $tmparticles[$key]['quantity'] = $value;
-        }
-
-    }
-    echo '<div class=" row media mb-3">';
-    if (isset($_POST['selects'])) {
-        $_SESSION['selects'] = $_POST['selects'];
-    }
-    foreach ($_SESSION['selects'] as $select) {
-        $reponse = $bdd->query('Select idProduct, productName, description, price, image FROM product WHERE idProduct=' . intval($select));
-        $donnees = $reponse->fetch();
-
-        $tmparticles[$select]['price'] = $donnees['price'];
-
-        if (!isset($_POST['quantity'][$select])) {
-            $tmparticles[$select]['quantity'] = '1';
-            $_SESSION['quantity'][$select] = '1';
-        }
-        ?>
-
-        <img src="<?php echo $donnees['image'] ?>" class="align-self-center mr-5 col-2" alt="photo produit">
-        <div class="align-self-center col-6">
-            <h5 class="mt-0"><?php echo $donnees['productName'] ?></h5>
-            <p><?php echo $donnees['description'] ?></p>
-        </div>
-        <div class="align-self-center col-2">
-            <p><?php echo $donnees['price'] ?> €</br></p>
-        </div>
-        <div class="col-1 mt-2">
-            <label for="inputQuantity">Quantité </label>
-            <input type="Number" placeholder="1" class="form-control" id="inputQuantity"
-                   name="quantity[<?php echo $donnees['idProduct'] ?>]"
-                <?php if (isset($_SESSION['quantity'])){ ?>
-                   value="<?php echo $_SESSION['quantity'][$select] ?>"<?php } ?>
-
-        </div>
-
-        </div>
-        <?php
-        $reponse->closeCursor();
-
-
-    }
-
-    return $tmparticles;
-}
-
-function totalPanier($price, $quantity)
-{
-    $sum = 0;
-    $sum = $sum + intval($price) * intval($quantity);
-    return $sum;
-}
-
-function passercommande($bdd)
-{
-    if (isset($_POST['sendCommand'])) {
-
-        $idClient = 2;
-        $totalAmount = $_SESSION['sum'];
-
-
-        $req = $bdd->prepare('INSERT INTO orders(idClient, totalAmount) VALUES(:idClient, :totalAmount)');
-        $req->execute(array(
-            'idClient' => $idClient,
-            'totalAmount' => $totalAmount,
-
-        ));
-
-        $idOrder = $bdd->lastInsertId();
-        $idOrder = intval($idOrder);
-
-
-        foreach ($_SESSION['quantity'] as $key => $select) {
-            $quantity = intval($select);
-            $idProduct = $key;
-
-            $req = $bdd->prepare('INSERT INTO orderproduct(quantity, id_order, idProduct) VALUES(:quantity, :id_order, :idProduct)');
-
-            $req->execute(array(
-                'quantity' => $quantity,
-                'id_order' => $idOrder,
-                'idProduct' => $idProduct,
-            ));
-        }
-
-        echo 'La commande a bien été passée !';
-    }
-}
-
-function affichProduct($bdd)
-{
-    $reponse = $bdd->query('Select idProduct, productName, description, price, image FROM product');
-    while ($donnees = $reponse->fetch()) { ?>
-
-        <div class="media mb-3">
-            <img src="<?php echo $donnees['image'] ?>" class="align-self-center mr-5 col-2" alt="photo produit">
-            <div class="align-self-center col-6">
-                <h5 class="mt-0"><?php echo $donnees['productName'] ?></h5>
-                <p><?php echo $donnees['description'] ?></p>
-            </div>
-            <div class="align-self-center col-2">
-                <p><?php echo $donnees['price'] ?> €</br></p>
-            </div>
-            <div class="form-check align-self-center col-2">
-                <input type="checkbox" name="selects[]" value="<?= $donnees['idProduct'] ?>" class="form-check-input"
-                       id="key">
-                <label class="form-check-label" for="key">Selectionner</label>
-            </div>
-        </div>
-        <?php
-    }
-    $reponse->closeCursor();
-}
-
 function displayArticle($article)
 {
     ?>
@@ -241,20 +123,30 @@ function displayArticle($article)
             <p><?= $article->getPrice() ?> €</br></p>
         </div>
         <div class="form-check align-self-center col-2">
-            <input type="checkbox" name="selects[]" value="<?= $article->getName() ?>" class="form-check-input"
-                   id="key">
-            <label class="form-check-label" for="key">Selectionner</label>
+            <input type="checkbox" name="article[]" value="<?= $article->getidProduct() ?>" class="form-check-input"
+            >
+            <label class="form-check-label">Selectionner</label>
         </div>
     </div>
     <?php
 }
 
-
 function displayCat($catalogue)
 {
-    foreach ($catalogue->getCatalogue() as $article) {
-        displayArticle($article);
-    }
+    ?>
+    <form method="post" action="panier_Objet.php">
+        <?php
+        foreach ($catalogue->getCatalogue() as $article) {
+            displayArticle($article);
+        }
+        ?>
+        <div class="row justify-content-center mt-5 mb-5">
+            <div class="col-2">
+                <button type="submit" class="btn btn-primary">Commandé</button>
+            </div>
+        </div>
+    </form>
+    <?php
 }
 
 function displayClient(Client $client)
@@ -283,5 +175,52 @@ function displayListeClients($listeClients)
 
     </div>
     <?php
+}
+
+function displayPanier($articles, $bdd)
+{
+    ?>
+    <form method="post" action="panier_Objet.php">
+        <div class=" row media mb-3">
+            <?php
+            foreach ($articles->getPanier() as $key => $article) {
+                $reponse = $bdd->query('Select idProduct, productName, description, price, image FROM product WHERE idProduct=' . intval($key));
+                $donnees = $reponse->fetch(); ?>
+
+
+                <img src="<?php echo $donnees['image'] ?>" class="align-self-center mr-5 col-2" alt="photo produit">
+                <div class="align-self-center col-6">
+                    <h5 class="mt-0"><?php echo $donnees['productName'] ?></h5>
+                    <p><?php echo $donnees['description'] ?></p>
+                </div>
+                <div class="align-self-center col-1">
+                    <p><?php echo $donnees['price'] ?> €</br></p>
+                </div>
+                <div class="align-self-center  col-1 ">
+                    <input type="hidden" name="article[<?= $donnees['idProduct'] ?>]" class="form-check-input" id="key"
+                           value="<?= $donnees['idProduct'] ?>">
+                    <label for="inputQuantity">Quantité </label>
+                    <input type="Number" placeholder="1" class="form-control" id="inputQuantity"
+                           name="quantity[<?php echo $donnees['idProduct'] ?>]" value="<?= $article ?>">
+                </div>
+                <div class="col-1 align-self-center">
+                    <button type="submit" name="<?= $key ?>" class="btn btn-primary">Supprimer</button>
+                </div>
+            <?php }
+            ?>
+            <div class="container">
+                <div class="row justify-content-between mt-5">
+                    <div class="col-4 ">
+                        <button type="submit" class="btn btn-primary">Actualiser</button>
+                    </div>
+                </div>
+            </div>
+    </form>
+
+    <?php
+//    echo '<b></br> Le total du panier est de ' . $sum . ' euros'; <!-- </b>-->
+
+
+
 }
 
