@@ -24,6 +24,6 @@ while ($article = $reponse->fetch()) {
     }
     $catalogue->addArticles($articles);
 }
-
+$panier=$_SESSION;
 displayCat($catalogue);
 footer();

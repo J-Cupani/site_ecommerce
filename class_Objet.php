@@ -216,7 +216,7 @@ class Panier
     public function updateArticle($idProduct, $quantity)
     {
         if (isset($idProduct)) {
-            $this->_panier[$idProduct] = $quantity;
+            $this->_panier[$idProduct]= $quantity;
         }
     }
 
@@ -224,6 +224,12 @@ class Panier
     {
         unset ($this->_panier[$idProduct]);
     }
+}
+
+class Somme
+{
+
+
 }
 
 class Client

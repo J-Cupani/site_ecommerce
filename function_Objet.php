@@ -179,11 +179,14 @@ function displayListeClients($listeClients)
 
 function displayPanier($articles, $bdd)
 {
+    $sum = 0;
+    $tab_tmp = [];
     ?>
     <form method="post" action="panier_Objet.php">
         <div class=" row media mb-3">
             <?php
             foreach ($articles->getPanier() as $key => $article) {
+                $tab_tmp[$key]['quantity'] = $article;
                 $reponse = $bdd->query('Select idProduct, productName, description, price, image FROM product WHERE idProduct=' . intval($key));
                 $donnees = $reponse->fetch(); ?>
 
@@ -194,7 +197,8 @@ function displayPanier($articles, $bdd)
                     <p><?php echo $donnees['description'] ?></p>
                 </div>
                 <div class="align-self-center col-1">
-                    <p><?php echo $donnees['price'] ?> €</br></p>
+                    <p><?php echo $donnees['price'];
+                        $tab_tmp[$key]['price'] = $donnees['price']; ?> €</br></p>
                 </div>
                 <div class="align-self-center  col-1 ">
                     <input type="hidden" name="article[<?= $donnees['idProduct'] ?>]" class="form-check-input" id="key"
@@ -206,8 +210,10 @@ function displayPanier($articles, $bdd)
                 <div class="col-1 align-self-center">
                     <button type="submit" name="<?= $key ?>" class="btn btn-primary">Supprimer</button>
                 </div>
-            <?php }
-            ?>
+                <?php $sum = $sum + totalPanier($tab_tmp[$key]['price'], $tab_tmp[$key]['quantity']);
+            }
+            echo '<b></br> Le total du panier est de ' . $sum . ' euros'; ?> </b>
+
             <div class="container">
                 <div class="row justify-content-between mt-5">
                     <div class="col-4 ">
@@ -216,11 +222,15 @@ function displayPanier($articles, $bdd)
                 </div>
             </div>
     </form>
-
     <?php
-//    echo '<b></br> Le total du panier est de ' . $sum . ' euros'; <!-- </b>-->
-
-
-
 }
 
+
+function totalPanier($price, $quantity)
+{
+
+    $sum = intval($price) * intval($quantity);
+    return $sum;
+}
+
+//$sum = $sum + intval($tab_tmp[$key]['quantity']) * intval($tab_tmp[$key]['price']);

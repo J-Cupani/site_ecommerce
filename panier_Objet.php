@@ -16,6 +16,7 @@ if (isset($_POST['article'])) {
     if (isset($_POST['article'])) {
         foreach ($articles as $article) {
             $panier->addArticle($article);
+
         }
     }
 
@@ -33,6 +34,7 @@ if (isset($_POST['article'])) {
     }
     displayPanier($panier, $bdd);
     $_SESSION = $panier;
+
 } else {
     echo 'Votre panier est vide !';
 }
